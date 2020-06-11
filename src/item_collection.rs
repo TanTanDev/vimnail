@@ -1,15 +1,13 @@
 use crate::item::Image;
 use ggez::Context;
 
-pub struct ItemCollection{
-    pub items: Vec::<Image>,
+pub struct ItemCollection {
+    pub items: Vec<Image>,
 }
 
 impl ItemCollection {
     pub fn new() -> ItemCollection {
-        ItemCollection {
-            items: Vec::new(),
-        }
+        ItemCollection { items: Vec::new() }
     }
 
     pub fn add(&mut self, image: Image) {

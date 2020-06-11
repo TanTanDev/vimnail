@@ -1,12 +1,12 @@
-use nalgebra;
+use crate::direction::Direction;
 use ggez;
 use ggez::Context;
-use crate::direction::Direction;
+use nalgebra;
 
 #[derive(Clone, Copy)]
 pub struct Item {
-    position: nalgebra::Vector2::<f32>,
-    scale: nalgebra::Vector2::<f32>, 
+    position: nalgebra::Vector2<f32>,
+    scale: nalgebra::Vector2<f32>,
 }
 
 #[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
@@ -18,45 +18,42 @@ pub enum ItemType {
 
 impl Default for Item {
     fn default() -> Self {
-         todo!()
+        todo!()
     }
 }
 
-
-pub trait ItemData {
-
-}
-
+pub trait ItemData {}
 
 pub struct Image {
     path: String,
     image: ggez::graphics::Image,
-    pub position: nalgebra::Vector2::<f32>,
+    pub position: nalgebra::Vector2<f32>,
     pub rotation: f32,
-    pub scale: nalgebra::Vector2::<f32>,
+    pub scale: nalgebra::Vector2<f32>,
 }
 
-impl ItemData for Image {
-
-}
+impl ItemData for Image {}
 
 impl Image {
-    pub fn new(ctx: &mut Context, path: String) -> ggez::GameResult<Self>{
+    pub fn new(ctx: &mut Context, path: String) -> ggez::GameResult<Self> {
         let image = ggez::graphics::Image::new(ctx, &path)?;
-        Ok(Image{
+        Ok(Image {
             path,
             image,
-            position: nalgebra::Vector2::<f32>::new(0.0,0.0),
-            scale: nalgebra::Vector2::<f32>::new(1.0,1.0),
+            position: nalgebra::Vector2::<f32>::new(0.0, 0.0),
+            scale: nalgebra::Vector2::<f32>::new(1.0, 1.0),
             rotation: 0.0,
         })
     }
 
     pub fn draw(&self, ctx: &mut Context) -> ggez::GameResult {
         let mut params = ggez::graphics::DrawParam::default();
-        params.dest = mint::Point2{x: self.position.x, y: self.position.y};
+        params.dest = mint::Point2 {
+            x: self.position.x,
+            y: self.position.y,
+        };
         params.rotation = self.rotation;
-        params.offset = mint::Point2{x: 0.5, y: 0.5};
+        params.offset = mint::Point2 { x: 0.5, y: 0.5 };
         params.scale = self.scale.into();
         ggez::graphics::draw(ctx, &self.image, params)?;
         Ok(())
@@ -138,4 +135,3 @@ impl Image {
         }
     }
 }
-

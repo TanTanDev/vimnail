@@ -1,5 +1,5 @@
-use crate::mode::Mode;
 use crate::constants;
+use crate::mode::Mode;
 use std::vec::Vec;
 
 pub struct ModeHistory {
@@ -8,7 +8,7 @@ pub struct ModeHistory {
 
 impl ModeHistory {
     pub fn new() -> Self {
-        ModeHistory{
+        ModeHistory {
             history: Vec::<Mode>::with_capacity(constants::DEFAULT_HISTORY_CAPACITY),
         }
     }

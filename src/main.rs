@@ -6,20 +6,21 @@ use ggez::{ContextBuilder, GameResult};
 use std::env;
 use std::path;
 
-mod input_action;
 mod action_processer;
+mod action_processer_utils;
 mod action_type;
-mod mode;
-mod insert_type;
-mod mode_history;
+mod app;
+mod board;
 mod constants;
+mod direction;
+mod edit_type;
 mod graphics;
+mod input_action;
+mod insert_type;
 mod item;
 mod item_collection;
-mod edit_type;
-mod direction;
-mod board;
-mod app;
+mod mode;
+mod mode_history;
 
 use app::App;
 

@@ -1,11 +1,10 @@
-use std::hash::Hash;
+use crate::edit_type::EditType;
 use crate::insert_type::InsertType;
 use crate::item::ItemType;
-use crate::edit_type::EditType;
+use std::hash::Hash;
 
 #[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
-pub enum Mode
-{
+pub enum Mode {
     Command,
     Any,
     Insert,
@@ -15,7 +14,6 @@ pub enum Mode
 }
 
 impl std::fmt::Display for Mode {
-
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::result::Result<(), std::fmt::Error> {
         write!(f, "{:?}", self)
     }

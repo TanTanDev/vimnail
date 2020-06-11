@@ -4,10 +4,9 @@ use ggez::event::KeyCode;
 pub type InputActions = std::vec::Vec<InputAction>;
 
 #[derive(Clone)]
-pub struct InputAction
-{
+pub struct InputAction {
     pub key_code: KeyCode,
-    pub action_type: ActionType, 
+    pub action_type: ActionType,
 }
 
 impl InputAction {
