@@ -14,6 +14,7 @@ impl ItemCollection {
         self.items.push(image);
     }
 
+    #[allow(dead_code)]
     pub fn get(&self, index: usize) -> Option<&Image> {
         self.items.get(index)
     }

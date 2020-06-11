@@ -5,7 +5,7 @@ use crate::mode::Mode;
 #[derive(Clone, Copy)]
 pub enum ActionType {
     ChangeMode(Mode),
-    PreviousMode,
+    _PreviousMode,
     AddItem(ItemType),
     Move(Direction),
     Rotate(Direction),

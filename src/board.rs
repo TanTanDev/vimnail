@@ -29,9 +29,6 @@ impl Board {
     }
 
     pub fn draw(&self, ctx: &mut Context) -> GameResult {
-        for item in &self.item_collection.items {
-            item.draw(ctx)?;
-        }
-        Ok(())
+        self.item_collection.draw(ctx)
     }
 }

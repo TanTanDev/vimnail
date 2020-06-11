@@ -1,45 +1,26 @@
-use cgmath;
 use ggez;
-use rand;
 
-use cgmath::Point2;
-use cgmath::Vector2;
-use ggez::conf::{WindowMode, WindowSetup};
 use ggez::event;
-use ggez::graphics::{Align, Color, DrawParam, Font, Scale, Text, TextFragment};
 use ggez::input::keyboard::KeyMods;
 use ggez::input::keyboard::*;
 use ggez::timer;
-use ggez::{Context, ContextBuilder, GameResult};
-use std::env;
+use ggez::{Context, GameResult};
 use std::f32;
-use std::path;
 
 use crate::action_processer;
 use crate::action_processer_utils;
 use crate::action_type;
 use crate::board;
-use crate::constants;
-use crate::direction;
-use crate::edit_type;
 use crate::graphics;
-use crate::input_action;
-use crate::insert_type;
 use crate::item;
-use crate::item_collection;
 use crate::mode;
 use crate::mode_history;
 
 use action_processer::{ActionProcesser, ActionProcesserBuilder};
 use action_type::ActionType;
 use board::Board;
-use direction::Direction;
-use edit_type::EditType;
 use graphics::mode_visualizer::ModeVisualizer;
-use input_action::InputAction;
-use insert_type::InsertType;
 use item::{Image, ItemType};
-use item_collection::ItemCollection;
 use mode::Mode;
 use mode_history::ModeHistory;
 
@@ -95,7 +76,7 @@ impl App {
                     self.mode_visualizer.change(ctx, m);
                     println!("changed mode to: {:?}", m);
                 }
-                ActionType::PreviousMode => {
+                ActionType::_PreviousMode => {
                     let maybe_mode = self.mode_history.prev_consume();
                     if let Some(mode) = maybe_mode {
                         self.set_mode(ctx, mode);
@@ -152,7 +133,7 @@ impl App {
 }
 
 impl event::EventHandler for App {
-    fn update(&mut self, ctx: &mut Context) -> GameResult {
+    fn update(&mut self, _ctx: &mut Context) -> GameResult {
         //const DESIRED_FPS: u32 = 60;
         //while timer::check_update_time(ctx, DESIRED_FPS) {}
         Ok(())
@@ -161,7 +142,7 @@ impl event::EventHandler for App {
     fn draw(&mut self, ctx: &mut Context) -> GameResult {
         ggez::graphics::clear(ctx, [0.1, 0.2, 0.3, 1.0].into());
         self.board.draw(ctx)?;
-        self.mode_visualizer.draw(ctx);
+        self.mode_visualizer.draw(ctx)?;
         ggez::graphics::present(ctx)?;
         timer::yield_now();
         Ok(())
@@ -174,7 +155,6 @@ impl event::EventHandler for App {
         _keymods: KeyMods,
         _repeat: bool,
     ) {
-        let maybe_action_type = self.action_processer.process_input(self.mode, keycode);
         self.handle_key(ctx, keycode);
     }
 

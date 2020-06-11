@@ -16,7 +16,6 @@ mod direction;
 mod edit_type;
 mod graphics;
 mod input_action;
-mod insert_type;
 mod item;
 mod item_collection;
 mod mode;

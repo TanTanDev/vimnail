@@ -5,8 +5,8 @@ use nalgebra;
 
 #[derive(Clone, Copy)]
 pub struct Item {
-    position: nalgebra::Vector2<f32>,
-    scale: nalgebra::Vector2<f32>,
+    //position: nalgebra::Vector2<f32>,
+//scale: nalgebra::Vector2<f32>,
 }
 
 #[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
@@ -25,7 +25,7 @@ impl Default for Item {
 pub trait ItemData {}
 
 pub struct Image {
-    path: String,
+    //path: String,
     image: ggez::graphics::Image,
     pub position: nalgebra::Vector2<f32>,
     pub rotation: f32,
@@ -38,7 +38,7 @@ impl Image {
     pub fn new(ctx: &mut Context, path: String) -> ggez::GameResult<Self> {
         let image = ggez::graphics::Image::new(ctx, &path)?;
         Ok(Image {
-            path,
+            //path,
             image,
             position: nalgebra::Vector2::<f32>::new(0.0, 0.0),
             scale: nalgebra::Vector2::<f32>::new(1.0, 1.0),
@@ -60,8 +60,8 @@ impl Image {
     }
 
     pub fn rotate(&mut self, dt: f32, move_dir: Direction) {
-        let ROTATE_SPEED = 10.0;
-        let delta_speed = ROTATE_SPEED * dt;
+        let rotate_speed = 10.0;
+        let delta_speed = rotate_speed * dt;
         match move_dir {
             Direction::Left => {
                 self.rotation -= delta_speed;

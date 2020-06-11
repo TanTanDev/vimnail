@@ -1,5 +1,4 @@
 use crate::edit_type::EditType;
-use crate::insert_type::InsertType;
 use crate::item::ItemType;
 use std::hash::Hash;
 

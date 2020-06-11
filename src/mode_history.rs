@@ -18,6 +18,7 @@ impl ModeHistory {
     }
 
     // Constumes history and try to return top mode
+    #[allow(dead_code)]
     pub fn last_consume(&mut self) -> Option<Mode> {
         self.history.truncate(1);
         self.history.pop()

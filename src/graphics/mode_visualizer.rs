@@ -1,14 +1,11 @@
 use crate::mode::Mode;
 
 use ggez;
-use ggez::graphics::{
-    BlendMode, Color, DrawMode, DrawParam, Drawable, Mesh, Rect, Text, TextFragment,
-};
+use ggez::graphics::{DrawMode, DrawParam, Mesh, Rect, Text, TextFragment};
 use ggez::GameResult;
 use nalgebra;
 
 pub struct ModeVisualizer {
-    blend_mode: Option<BlendMode>,
     text: Text,
     rect_mesh: Mesh,
     rect: Rect,
@@ -21,10 +18,7 @@ impl ModeVisualizer {
         let rect_mesh =
             ggez::graphics::Mesh::new_rectangle(ctx, DrawMode::fill(), rect, ggez::graphics::BLACK)
                 .unwrap();
-
         let mut mode_visualizer = ModeVisualizer {
-            blend_mode: Some(BlendMode::Multiply),
-            //text_fragment,
             rect_mesh,
             text: Text::new(TextFragment::default()),
             rect,

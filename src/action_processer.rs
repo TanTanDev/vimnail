@@ -10,10 +10,6 @@ pub struct ActionProcesser {
 }
 
 impl ActionProcesser {
-    pub fn get_input_actions(&mut self, mode: Mode) -> Option<&InputActions> {
-        self.mode_inputactions.get(&mode)
-    }
-
     pub fn process_input(&self, mode: Mode, key_code: KeyCode) -> Option<ActionType> {
         let inputactions = self.mode_inputactions.get(&mode)?;
         let maybe_actiontype = inputactions
