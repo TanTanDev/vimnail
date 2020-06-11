@@ -1,5 +1,7 @@
 use std::hash::Hash;
 use crate::insert_type::InsertType;
+use crate::item::ItemType;
+use crate::edit_type::EditType;
 
 #[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
 pub enum Mode
@@ -8,7 +10,8 @@ pub enum Mode
     Any,
     Insert,
     Edit,
-    InsertType(InsertType),
+    EditType(EditType),
+    InsertType(ItemType),
 }
 
 impl std::fmt::Display for Mode {
