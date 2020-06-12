@@ -4,7 +4,6 @@ use crate::key_state::KeyState;
 use crate::mode::Mode;
 
 use ggez::event::KeyCode;
-use ggez::Context;
 use std::collections::HashMap;
 
 pub struct ActionProcesser {
@@ -12,17 +11,6 @@ pub struct ActionProcesser {
 }
 
 impl ActionProcesser {
-    pub fn get_input_actions(&mut self, mode: Mode) -> Option<&InputActions> {
-        self.mode_inputactions.get(&mode)
-    }
-
-    // pub fn process_inputs(&self, ctx: &mut Context, mode: Mode) {
-    //     let keys = ggez::input::keyboard::pressed_keys(ctx);
-    //     for key in keys {
-    //         self.process_input(mode, *key);
-    //     }
-    // }
-
     pub fn process_input(
         &self,
         mode: Mode,
