@@ -18,6 +18,8 @@ mod graphics;
 mod input_action;
 mod item;
 mod item_collection;
+mod key_state;
+mod keyboard_input_tracker;
 mod mode;
 mod mode_history;
 

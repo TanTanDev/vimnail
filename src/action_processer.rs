@@ -1,8 +1,10 @@
 use crate::action_type::ActionType;
 use crate::input_action::{InputAction, InputActions};
+use crate::key_state::KeyState;
 use crate::mode::Mode;
 
 use ggez::event::KeyCode;
+use ggez::Context;
 use std::collections::HashMap;
 
 pub struct ActionProcesser {
@@ -10,11 +12,38 @@ pub struct ActionProcesser {
 }
 
 impl ActionProcesser {
-    pub fn process_input(&self, mode: Mode, key_code: KeyCode) -> Option<ActionType> {
+    pub fn get_input_actions(&mut self, mode: Mode) -> Option<&InputActions> {
+        self.mode_inputactions.get(&mode)
+    }
+
+    // pub fn process_inputs(&self, ctx: &mut Context, mode: Mode) {
+    //     let keys = ggez::input::keyboard::pressed_keys(ctx);
+    //     for key in keys {
+    //         self.process_input(mode, *key);
+    //     }
+    // }
+
+    pub fn process_input(
+        &self,
+        mode: Mode,
+        key_code: KeyCode,
+        key_state: KeyState,
+    ) -> Option<ActionType> {
         let inputactions = self.mode_inputactions.get(&mode)?;
         let maybe_actiontype = inputactions
             .iter()
-            .find(|ia| ia.key_code == key_code)
+            .find(|ia| {
+                if ia.key_code != key_code {
+                    return false;
+                }
+                if ia.repeat && key_state == KeyState::Down {
+                    true
+                } else if !ia.repeat && key_state == KeyState::Pressed {
+                    true
+                } else {
+                    false
+                }
+            })
             .map(|ia| ia.action_type);
 
         if let Some(action_type) = maybe_actiontype {

@@ -158,19 +158,19 @@ fn configure_edit_move(action_processer_builder: &mut ActionProcesserBuilder) {
         )
         .with_inputaction(
             Mode::EditType(EditType::Move),
-            InputAction::new(KeyCode::H, ActionType::Move(Direction::Left)),
+            InputAction::new(KeyCode::H, ActionType::Move(Direction::Left)).repeat(true),
         )
         .with_inputaction(
             Mode::EditType(EditType::Move),
-            InputAction::new(KeyCode::J, ActionType::Move(Direction::Down)),
+            InputAction::new(KeyCode::J, ActionType::Move(Direction::Down)).repeat(true),
         )
         .with_inputaction(
             Mode::EditType(EditType::Move),
-            InputAction::new(KeyCode::K, ActionType::Move(Direction::Up)),
+            InputAction::new(KeyCode::K, ActionType::Move(Direction::Up)).repeat(true),
         )
         .with_inputaction(
             Mode::EditType(EditType::Move),
-            InputAction::new(KeyCode::L, ActionType::Move(Direction::Right)),
+            InputAction::new(KeyCode::L, ActionType::Move(Direction::Right)).repeat(true),
         );
 }
 
@@ -196,19 +196,19 @@ fn configure_edit_rotate(action_processer_builder: &mut ActionProcesserBuilder) 
         )
         .with_inputaction(
             Mode::EditType(EditType::Rotate),
-            InputAction::new(KeyCode::L, ActionType::Rotate(Direction::Right)),
+            InputAction::new(KeyCode::L, ActionType::Rotate(Direction::Right)).repeat(true),
         )
         .with_inputaction(
             Mode::EditType(EditType::Rotate),
-            InputAction::new(KeyCode::H, ActionType::Rotate(Direction::Left)),
+            InputAction::new(KeyCode::H, ActionType::Rotate(Direction::Left)).repeat(true),
         )
         .with_inputaction(
             Mode::EditType(EditType::Rotate),
-            InputAction::new(KeyCode::J, ActionType::Rotate(Direction::Down)),
+            InputAction::new(KeyCode::J, ActionType::Rotate(Direction::Down)).repeat(true),
         )
         .with_inputaction(
             Mode::EditType(EditType::Rotate),
-            InputAction::new(KeyCode::K, ActionType::Rotate(Direction::Up)),
+            InputAction::new(KeyCode::K, ActionType::Rotate(Direction::Up)).repeat(true),
         )
         .with_inputaction(
             Mode::EditType(EditType::Rotate),
@@ -248,19 +248,19 @@ fn configure_edit_scale(action_processer_builder: &mut ActionProcesserBuilder) {
         )
         .with_inputaction(
             Mode::EditType(EditType::Scale),
-            InputAction::new(KeyCode::H, ActionType::Scale(Direction::Left)),
+            InputAction::new(KeyCode::H, ActionType::Scale(Direction::Left)).repeat(true),
         )
         .with_inputaction(
             Mode::EditType(EditType::Scale),
-            InputAction::new(KeyCode::J, ActionType::Scale(Direction::Down)),
+            InputAction::new(KeyCode::J, ActionType::Scale(Direction::Down)).repeat(true),
         )
         .with_inputaction(
             Mode::EditType(EditType::Scale),
-            InputAction::new(KeyCode::K, ActionType::Scale(Direction::Up)),
+            InputAction::new(KeyCode::K, ActionType::Scale(Direction::Up)).repeat(true),
         )
         .with_inputaction(
             Mode::EditType(EditType::Scale),
-            InputAction::new(KeyCode::L, ActionType::Scale(Direction::Right)),
+            InputAction::new(KeyCode::L, ActionType::Scale(Direction::Right)).repeat(true),
         );
 }
 
@@ -293,19 +293,19 @@ fn configure_edit_scale_uniform(action_processer_builder: &mut ActionProcesserBu
         )
         .with_inputaction(
             Mode::EditType(EditType::ScaleUniform),
-            InputAction::new(KeyCode::H, ActionType::ScaleUniform(Direction::Left)),
+            InputAction::new(KeyCode::H, ActionType::ScaleUniform(Direction::Left)).repeat(true),
         )
         .with_inputaction(
             Mode::EditType(EditType::ScaleUniform),
-            InputAction::new(KeyCode::J, ActionType::ScaleUniform(Direction::Down)),
+            InputAction::new(KeyCode::J, ActionType::ScaleUniform(Direction::Down)).repeat(true),
         )
         .with_inputaction(
             Mode::EditType(EditType::ScaleUniform),
-            InputAction::new(KeyCode::K, ActionType::ScaleUniform(Direction::Up)),
+            InputAction::new(KeyCode::K, ActionType::ScaleUniform(Direction::Up)).repeat(true),
         )
         .with_inputaction(
             Mode::EditType(EditType::ScaleUniform),
-            InputAction::new(KeyCode::L, ActionType::ScaleUniform(Direction::Right)),
+            InputAction::new(KeyCode::L, ActionType::ScaleUniform(Direction::Right)).repeat(true),
         );
 }
 

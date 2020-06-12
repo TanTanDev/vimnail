@@ -7,6 +7,7 @@ pub type InputActions = std::vec::Vec<InputAction>;
 pub struct InputAction {
     pub key_code: KeyCode,
     pub action_type: ActionType,
+    pub repeat: bool,
 }
 
 impl InputAction {
@@ -14,6 +15,12 @@ impl InputAction {
         InputAction {
             key_code,
             action_type,
+            repeat: false,
         }
+    }
+
+    pub fn repeat(mut self, repeat: bool) -> Self {
+        self.repeat = repeat;
+        self
     }
 }

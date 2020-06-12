@@ -13,6 +13,8 @@ use crate::action_type;
 use crate::board;
 use crate::graphics;
 use crate::item;
+use crate::key_state::KeyState;
+use crate::keyboard_input_tracker::KeyboardInputTracker;
 use crate::mode;
 use crate::mode_history;
 
@@ -33,6 +35,7 @@ pub struct App {
     mode_visualizer: ModeVisualizer,
     board: Board,
     current_edit_index: Option<usize>,
+    keyboard_input_tracker: KeyboardInputTracker,
 }
 
 impl App {
@@ -53,6 +56,7 @@ impl App {
             action_processer,
             mode_history,
             board: Board::new(),
+            keyboard_input_tracker: KeyboardInputTracker::new(),
             mode_visualizer,
             current_edit_index: None,
         })
@@ -64,78 +68,89 @@ impl App {
         self.mode_history.register(mode);
         self.mode_visualizer.change(ctx, mode);
     }
-
-    fn handle_key(&mut self, ctx: &mut Context, keycode: KeyCode) {
-        let dt = ggez::timer::delta(ctx).as_secs_f32();
-        let maybe_action_type = self.action_processer.process_input(self.mode, keycode);
-        if let Some(action_type) = maybe_action_type {
-            match action_type {
-                ActionType::ChangeMode(m) => {
-                    self.mode = m;
-                    self.mode_history.register(m);
-                    self.mode_visualizer.change(ctx, m);
-                    println!("changed mode to: {:?}", m);
-                }
-                ActionType::_PreviousMode => {
-                    let maybe_mode = self.mode_history.prev_consume();
-                    if let Some(mode) = maybe_mode {
-                        self.set_mode(ctx, mode);
-                    } else {
-                        // command should alwaus be top mode
-                        self.mode_history.register(Mode::Command);
-                        println!("No mode in history to jump to...");
-                    }
-                }
-                ActionType::AddItem(item) => {
-                    if item == ItemType::Image {
-                        // todo: remove unwrap
-                        let image = Image::new(ctx, "/ferris.png".to_string()).unwrap();
-                        self.board.item_collection.add(image);
-                        self.set_mode(ctx, Mode::Edit);
-                        self.current_edit_index = Some(self.board.item_collection.items.len() - 1);
-                    }
-                }
-                ActionType::Move(direction) => {
-                    self.board.edit_item(
-                        dt,
-                        direction,
-                        self.current_edit_index,
-                        item::Image::edit_move,
-                    );
-                }
-                ActionType::Rotate(direction) => {
-                    self.board.edit_item(
-                        dt,
-                        direction,
-                        self.current_edit_index,
-                        item::Image::rotate,
-                    );
-                }
-                ActionType::Scale(direction) => {
-                    self.board.edit_item(
-                        dt,
-                        direction,
-                        self.current_edit_index,
-                        item::Image::scale,
-                    );
-                }
-                ActionType::ScaleUniform(direction) => {
-                    self.board.edit_item(
-                        dt,
-                        direction,
-                        self.current_edit_index,
-                        item::Image::scale_uniform,
-                    );
-                } //_ => {},
-            }
-        }
-    }
 }
 
 impl event::EventHandler for App {
-    fn update(&mut self, _ctx: &mut Context) -> GameResult {
+    fn update(&mut self, ctx: &mut Context) -> GameResult {
         //const DESIRED_FPS: u32 = 60;
         //while timer::check_update_time(ctx, DESIRED_FPS) {}
+
+        // todo: improve code, need to clone because iterating something containing to self
+        // whilst trying to mutate self variables, is not allowed
+        let keys = self.keyboard_input_tracker.keys.clone();
+        for (key_code, key_state) in keys
+            .iter()
+            .filter(|(_key_code, key_state)| **key_state != KeyState::Up)
+        {
+            //println!("{:?}", key);
+            let dt = ggez::timer::delta(ctx).as_secs_f32();
+            let maybe_action_type = self
+                .action_processer
+                .process_input(self.mode, *key_code, *key_state);
+            if let Some(action_type) = maybe_action_type {
+                match action_type {
+                    ActionType::ChangeMode(m) => {
+                        self.mode = m;
+                        self.mode_history.register(m);
+                        self.mode_visualizer.change(ctx, m);
+                        println!("changed mode to: {:?}", m);
+                    }
+                    ActionType::_PreviousMode => {
+                        let maybe_mode = self.mode_history.prev_consume();
+                        if let Some(mode) = maybe_mode {
+                            self.set_mode(ctx, mode);
+                        } else {
+                            // command should alwaus be top mode
+                            self.mode_history.register(Mode::Command);
+                            println!("No mode in history to jump to...");
+                        }
+                    }
+                    ActionType::AddItem(item) => {
+                        if item == ItemType::Image {
+                            // todo: remove unwrap
+                            let image = Image::new(ctx, "/ferris.png".to_string()).unwrap();
+                            self.board.item_collection.add(image);
+                            self.set_mode(ctx, Mode::Edit);
+                            self.current_edit_index =
+                                Some(self.board.item_collection.items.len() - 1);
+                        }
+                    }
+                    ActionType::Move(direction) => {
+                        self.board.edit_item(
+                            dt,
+                            direction,
+                            self.current_edit_index,
+                            item::Image::edit_move,
+                        );
+                    }
+                    ActionType::Rotate(direction) => {
+                        self.board.edit_item(
+                            dt,
+                            direction,
+                            self.current_edit_index,
+                            item::Image::rotate,
+                        );
+                    }
+                    ActionType::Scale(direction) => {
+                        self.board.edit_item(
+                            dt,
+                            direction,
+                            self.current_edit_index,
+                            item::Image::scale,
+                        );
+                    }
+                    ActionType::ScaleUniform(direction) => {
+                        self.board.edit_item(
+                            dt,
+                            direction,
+                            self.current_edit_index,
+                            item::Image::scale_uniform,
+                        );
+                    } //_ => {},
+                }
+            }
+        }
+        self.keyboard_input_tracker.update();
         Ok(())
     }
 
@@ -150,12 +165,20 @@ impl event::EventHandler for App {
 
     fn key_down_event(
         &mut self,
-        ctx: &mut Context,
+        _ctx: &mut Context,
         keycode: KeyCode,
         _keymods: KeyMods,
-        _repeat: bool,
+        repeat: bool,
     ) {
-        self.handle_key(ctx, keycode);
+        if !repeat {
+            self.keyboard_input_tracker
+                .update_key(keycode, KeyState::Pressed);
+        }
+    }
+
+    fn key_up_event(&mut self, _ctx: &mut Context, keycode: KeyCode, _keymods: KeyMods) {
+        self.keyboard_input_tracker
+            .update_key(keycode, KeyState::Up);
     }
 
     fn resize_event(&mut self, ctx: &mut Context, width: f32, height: f32) {
