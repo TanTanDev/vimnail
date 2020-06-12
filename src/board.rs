@@ -18,12 +18,13 @@ impl Board {
         &mut self,
         dt: f32,
         direction: Direction,
+        is_fast: bool,
         maybe_index: Option<usize>,
-        edit_func: fn(&mut Image, f32, Direction),
+        edit_func: fn(&mut Image, f32, Direction, bool),
     ) {
         if let Some(index) = maybe_index {
             if let Some(image) = self.item_collection.get_mut(index) {
-                edit_func(image, dt, direction);
+                edit_func(image, dt, direction, is_fast);
             }
         }
     }

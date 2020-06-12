@@ -77,6 +77,7 @@ impl event::EventHandler for App {
 
         // todo: improve code, need to clone because iterating something containing to self
         // whilst trying to mutate self variables, is not allowed
+        let is_fast = ggez::input::keyboard::is_mod_active(ctx, KeyMods::SHIFT);
         let keys = self.keyboard_input_tracker.keys.clone();
         for (key_code, key_state) in keys
             .iter()
@@ -119,6 +120,7 @@ impl event::EventHandler for App {
                         self.board.edit_item(
                             dt,
                             direction,
+                            is_fast,
                             self.current_edit_index,
                             item::Image::edit_move,
                         );
@@ -127,6 +129,7 @@ impl event::EventHandler for App {
                         self.board.edit_item(
                             dt,
                             direction,
+                            is_fast,
                             self.current_edit_index,
                             item::Image::rotate,
                         );
@@ -135,6 +138,7 @@ impl event::EventHandler for App {
                         self.board.edit_item(
                             dt,
                             direction,
+                            is_fast,
                             self.current_edit_index,
                             item::Image::scale,
                         );
@@ -143,6 +147,7 @@ impl event::EventHandler for App {
                         self.board.edit_item(
                             dt,
                             direction,
+                            is_fast,
                             self.current_edit_index,
                             item::Image::scale_uniform,
                         );

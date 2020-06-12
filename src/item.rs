@@ -1,4 +1,6 @@
+use crate::constants::*;
 use crate::direction::Direction;
+
 use ggez;
 use ggez::Context;
 use nalgebra;
@@ -59,8 +61,11 @@ impl Image {
         Ok(())
     }
 
-    pub fn rotate(&mut self, dt: f32, move_dir: Direction) {
-        let rotate_speed = 10.0;
+    pub fn rotate(&mut self, dt: f32, move_dir: Direction, is_fast: bool) {
+        let rotate_speed = match is_fast {
+            true => SPEED_ROTATE_FAST,
+            false => SPEED_ROTATE_DEFAULT,
+        };
         let delta_speed = rotate_speed * dt;
         match move_dir {
             Direction::Left => {
@@ -78,8 +83,11 @@ impl Image {
         }
     }
 
-    pub fn edit_move(&mut self, dt: f32, move_dir: Direction) {
-        let move_speed = 1000.0;
+    pub fn edit_move(&mut self, dt: f32, move_dir: Direction, is_fast: bool) {
+        let move_speed = match is_fast {
+            true => SPEED_MOVE_FAST,
+            false => SPEED_MOVE_DEFAULT,
+        };
         let move_delta = move_speed * dt;
         match move_dir {
             Direction::Up => {
@@ -97,40 +105,50 @@ impl Image {
         }
     }
 
-    pub fn scale(&mut self, dt: f32, move_dir: Direction) {
+    pub fn scale(&mut self, dt: f32, move_dir: Direction, is_fast: bool) {
+        let scale_speed = match is_fast {
+            true => SPEED_SCALE_FAST,
+            false => SPEED_SCALE_DEFAULT,
+        };
+        let scale_delta = scale_speed * dt;
         match move_dir {
             Direction::Left => {
-                self.scale.x += dt;
+                self.scale.x += scale_delta;
             }
             Direction::Right => {
-                self.scale.x -= dt;
+                self.scale.x -= scale_delta;
             }
             Direction::Up => {
-                self.scale.y += dt;
+                self.scale.y += scale_delta;
             }
             Direction::Down => {
-                self.scale.y -= dt;
+                self.scale.y -= scale_delta;
             }
         }
     }
 
-    pub fn scale_uniform(&mut self, dt: f32, move_dir: Direction) {
+    pub fn scale_uniform(&mut self, dt: f32, move_dir: Direction, is_fast: bool) {
+        let scale_speed = match is_fast {
+            true => SPEED_SCALE_FAST,
+            false => SPEED_SCALE_DEFAULT,
+        };
+        let scale_delta = scale_speed * dt;
         match move_dir {
             Direction::Left => {
-                self.scale.x += dt;
-                self.scale.y += dt;
+                self.scale.x += scale_delta;
+                self.scale.y += scale_delta;
             }
             Direction::Right => {
-                self.scale.x -= dt;
-                self.scale.y -= dt;
+                self.scale.x -= scale_delta;
+                self.scale.y -= scale_delta;
             }
             Direction::Up => {
-                self.scale.x -= dt;
-                self.scale.y -= dt;
+                self.scale.x -= scale_delta;
+                self.scale.y -= scale_delta;
             }
             Direction::Down => {
-                self.scale.x += dt;
-                self.scale.y += dt;
+                self.scale.x += scale_delta;
+                self.scale.y += scale_delta;
             }
         }
     }
