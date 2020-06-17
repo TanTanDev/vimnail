@@ -2,6 +2,8 @@
 A vim like image editor, for creating thumbnails, or even animated thumbnails.
 Written in Rust
 
+![](about/animated_preview.gif)
+
 # Devlogs
 I've made videos documenting the process of making this software
 https://www.youtube.com/channel/UChl_NKOs1qqh_x7yJfaDpDw?view_as=subscriber
