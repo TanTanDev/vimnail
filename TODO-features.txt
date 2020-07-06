@@ -1,0 +1,36 @@
+DESCRIPTION: Vimnail is an image compositing/editing tool with a Vim-like interface. No mouse required.
+USE CASE: Command prompt users who need a simple image compositing/editing tool for basic tasks (e.g. thumbnail pics).
+
+ORIGINAL FEATURES
+    Add and edit layer of text
+    Add and adjust text outline
+    Select and apply text color
+    Exporting image to file
+    Custom image import
+    Adjusting canvas size
+    Project serialization
+
+ADDITIONAL FEATURES
+    Layer selection
+    Additional font/typeface support
+    User-defined default image values (canvas size, outline size, color) config file
+    SVG support
+    Command line support
+        Argument: open project
+        Argument: import image into project upon Vimnail execution
+    User-defined keymap binding config file
+
+CHORES
+    Step through code and add more comments
+    Add rustdoc comments
+
+DESIGN CONSIDERATIONS
+    Written vim-like commands       Some features may require more complex input, such as writing out path names to
+                                    new images for import (during runtime). Also add support for writing (':w') out
+                                    to file, and/or quitting program (':q').
+
+    Image editing                   So far, the proposed Vimnail features define it as more of an image compositor.
+                                    Which is fine; I think this serves it's intended purpose well. If there is will
+                                    to add pixel modification (color, alpha) support without a mouse, then some big
+                                    ideas should be brainstormed, as this could very well shape the rest of the
+                                    project.
