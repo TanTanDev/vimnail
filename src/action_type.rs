@@ -11,4 +11,5 @@ pub enum ActionType {
     Rotate(Direction),
     Scale(Direction),
     ScaleUniform(Direction),
+    SaveImage,
 }

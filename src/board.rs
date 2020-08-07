@@ -1,7 +1,10 @@
 use crate::direction::Direction;
 use crate::item::Image;
 use crate::item_collection::ItemCollection;
-use ggez::{Context, GameResult};
+use ggez::{Context, GameResult, graphics};
+use ggez::conf;
+use image::{DynamicImage, ImageBuffer};
+
 pub struct Board {
     pub item_collection: ItemCollection,
 }
@@ -27,6 +30,42 @@ impl Board {
                 edit_func(image, dt, direction, is_fast);
             }
         }
+    }
+
+    pub fn save_image(&mut self, ctx: &mut Context){
+        //TODO: Add actual error handling, no unwrap() shenanigans!
+
+        let (graphic_width, graphic_height) = graphics::drawable_size(ctx);
+        
+        let buffer_canvas = graphics::Canvas::new(ctx, graphic_width as u16, graphic_height as u16, conf::NumSamples::One).ok();
+        
+        //draw to canvas
+        graphics::set_canvas(ctx, buffer_canvas.as_ref());
+
+        self.draw(ctx).unwrap();
+        ggez::graphics::present(ctx).unwrap();
+
+        // capture the image from canvas
+        let canvas = buffer_canvas.unwrap();
+        let canvas_image = canvas.image();
+
+        // convert the image to rgba 8 bit vector
+        let image_rgba = canvas_image.to_rgba8(ctx).unwrap();
+
+        // turn the raw rgba8 into DynamicImage
+        let image_buffer = DynamicImage::ImageRgba8(ImageBuffer::from_raw(graphic_width as u32, graphic_height as u32, image_rgba).unwrap());
+
+        // flip the image cause the raw image vector is flipped.. dunno why *shrug*
+        let image_buffer = image_buffer.flipv();
+
+        //save the image
+        //TODO: change it to parameter
+        image_buffer.save("/home/riyan/Pictures/test.png").unwrap();
+
+        //return drawing to screen
+        graphics::set_canvas(ctx, Option::None);
+
+
     }
 
     pub fn draw(&self, ctx: &mut Context) -> GameResult {

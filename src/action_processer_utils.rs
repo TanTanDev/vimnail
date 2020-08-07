@@ -27,7 +27,11 @@ fn configure_command(action_processer_builder: &mut ActionProcesserBuilder) {
         .with_inputaction(
             Mode::Command,
             InputAction::new(KeyCode::E, ActionType::ChangeMode(Mode::Edit)),
-        );
+        )
+        .with_inputaction(
+            Mode::Command, 
+            InputAction::new(KeyCode::W, ActionType::SaveImage))
+        ;
 }
 
 fn configure_edit(action_processer_builder: &mut ActionProcesserBuilder) {

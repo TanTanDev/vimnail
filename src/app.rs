@@ -151,7 +151,11 @@ impl event::EventHandler for App {
                             self.current_edit_index,
                             item::Image::scale_uniform,
                         );
-                    } //_ => {},
+                    }
+                    ActionType::SaveImage => {
+                        self.board.save_image(ctx);
+                    }
+                    //_ => {},
                 }
             }
         }
