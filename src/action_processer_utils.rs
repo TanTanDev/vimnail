@@ -5,6 +5,7 @@ use crate::edit_type::EditType;
 use crate::input_action::InputAction;
 use crate::item::ItemType;
 use crate::mode::Mode;
+use crate::command_type::CommandType;
 
 use ggez::input::keyboard::KeyCode;
 
@@ -30,7 +31,8 @@ fn configure_command(action_processer_builder: &mut ActionProcesserBuilder) {
         )
         .with_inputaction(
             Mode::Command, 
-            InputAction::new(KeyCode::W, ActionType::SaveImage))
+            InputAction::new(KeyCode::Colon, ActionType::ChangeMode(Mode::CommandInput))
+        )
         ;
 }
 
@@ -313,6 +315,21 @@ fn configure_edit_scale_uniform(action_processer_builder: &mut ActionProcesserBu
         );
 }
 
+pub fn configure_command_input(action_processer_builder: &mut ActionProcesserBuilder){
+    action_processer_builder
+    .with_inputaction(
+        Mode::CommandInput,
+        InputAction::new(KeyCode::Escape, ActionType::ChangeMode(Mode::Command)))
+    .with_inputaction(
+        Mode::CommandInput,
+        InputAction::new(KeyCode::W, ActionType::CommandType(CommandType::SaveImage)),
+    )
+    .with_inputaction(
+        Mode::CommandInput,
+        InputAction::new(KeyCode::Return, ActionType::RunCommand),
+    );
+}
+
 pub fn configure_default(action_processer_builder: &mut ActionProcesserBuilder) {
     configure_modes(action_processer_builder);
     configure_command(action_processer_builder);
@@ -325,4 +342,5 @@ pub fn configure_default(action_processer_builder: &mut ActionProcesserBuilder) 
     configure_edit_rotate(action_processer_builder);
     configure_edit_scale(action_processer_builder);
     configure_edit_scale_uniform(action_processer_builder);
+    configure_command_input(action_processer_builder);
 }

@@ -5,6 +5,7 @@ use std::hash::Hash;
 #[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
 pub enum Mode {
     Command,
+    CommandInput,
     Any,
     Insert,
     Edit,

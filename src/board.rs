@@ -32,22 +32,21 @@ impl Board {
         }
     }
 
-    pub fn save_image(&mut self, ctx: &mut Context){
+    pub fn save_image(&mut self, ctx: &mut Context, path: &String){
         //TODO: Add actual error handling, no unwrap() shenanigans!
 
         let (graphic_width, graphic_height) = graphics::drawable_size(ctx);
         
         let buffer_canvas = graphics::Canvas::new(ctx, graphic_width as u16, graphic_height as u16, conf::NumSamples::One).ok();
         
-        //draw to canvas
+        //divert drawing into canvas
         graphics::set_canvas(ctx, buffer_canvas.as_ref());
-
         self.draw(ctx).unwrap();
         ggez::graphics::present(ctx).unwrap();
 
         // capture the image from canvas
         let canvas = buffer_canvas.unwrap();
-        let canvas_image = canvas.image();
+        let canvas_image = canvas.into_inner();
 
         // convert the image to rgba 8 bit vector
         let image_rgba = canvas_image.to_rgba8(ctx).unwrap();
@@ -59,10 +58,10 @@ impl Board {
         let image_buffer = image_buffer.flipv();
 
         //save the image
-        //TODO: change it to parameter
-        image_buffer.save("/home/riyan/Pictures/test.png").unwrap();
+        //TODO: change it to parameter and convert path to OS specific
+        image_buffer.save(path).unwrap();
 
-        //return drawing to screen
+        //return to drawing into screen
         graphics::set_canvas(ctx, Option::None);
 
 

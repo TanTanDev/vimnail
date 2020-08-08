@@ -22,6 +22,9 @@ mod key_state;
 mod keyboard_input_tracker;
 mod mode;
 mod mode_history;
+mod text_input;
+mod command_type;
+mod command_state;
 
 use app::App;
 
