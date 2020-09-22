@@ -3,7 +3,7 @@ use crate::direction::Direction;
 
 use ggez;
 use ggez::Context;
-use ggez::graphics::Drawable;
+use ggez::graphics::{Color, Drawable, Font, Image, Scale, Text, TextFragment};
 use nalgebra;
 
 #[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
@@ -144,5 +144,16 @@ impl Item {
 
 //TODO: Add more parameters support for more customized Images
 pub fn build_image_item(ctx: &mut Context, path: String) -> ggez::GameResult<Item> {
-    Ok(Item::new(Box::new(ggez::graphics::Image::new(ctx, path)?))?)
+    Ok(Item::new(Box::new(Image::new(ctx, path)?))?)
+}
+
+//TODO: Add more parameters support for more customized Text
+pub fn build_text_item(text: String) -> ggez::GameResult<Item> {
+    Ok(Item::new(Box::new(Text::new(TextFragment {
+        text,
+        color: Some(Color::new(1.0, 1.0, 1.0, 1.0)),
+        font: Some(Font::default()),
+        scale: Some(Scale::uniform(50.0)),
+        ..Default::default()
+    })))?)
 }

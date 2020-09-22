@@ -109,11 +109,17 @@ impl event::EventHandler for App {
                     ActionType::AddItem(item) => {
                         if item == ItemType::Image {
                             // todo: remove unwrap
-                            let image = item::build_image_item(ctx, "/ferris.png".to_string()).unwrap();
-                            self.board.item_collection.add(image);
+                            let display_image = item::build_image_item(ctx, "/ferris.png".to_string()).unwrap();
+                            self.board.item_collection.add(display_image);
                             self.set_mode(ctx, Mode::Edit);
-                            self.current_edit_index =
-                                Some(self.board.item_collection.items.len() - 1);
+                            self.current_edit_index = Some(self.board.item_collection.items.len() - 1);
+                        }
+                        else if item == ItemType::Text {
+                            // todo: remove unwrap
+                            let display_text = item::build_text_item("YE BOI".into()).unwrap();
+                            self.board.item_collection.add(display_text);
+                            self.set_mode(ctx, Mode::Edit);
+                            self.current_edit_index = Some(self.board.item_collection.items.len() - 1);
                         }
                     }
                     ActionType::Move(direction) => {
