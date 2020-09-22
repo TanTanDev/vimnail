@@ -3,13 +3,8 @@ use crate::direction::Direction;
 
 use ggez;
 use ggez::Context;
+use ggez::graphics::Drawable;
 use nalgebra;
-
-#[derive(Clone, Copy)]
-pub struct Item {
-    //position: nalgebra::Vector2<f32>,
-//scale: nalgebra::Vector2<f32>,
-}
 
 #[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
 pub enum ItemType {
@@ -18,30 +13,26 @@ pub enum ItemType {
     ParticleSystem,
 }
 
-impl Default for Item {
-    fn default() -> Self {
-        todo!()
-    }
-}
+// impl Default for Item {
+//     fn default() -> Self {
+//         todo!()
+//     }
+// }
 
-pub trait ItemData {}
-
-pub struct Image {
+pub struct Item {
     //path: String,
-    image: ggez::graphics::Image,
+    content: Box<dyn Drawable>,
     pub position: nalgebra::Vector2<f32>,
     pub rotation: f32,
     pub scale: nalgebra::Vector2<f32>,
 }
 
-impl ItemData for Image {}
-
-impl Image {
+impl Item {
     pub fn new(ctx: &mut Context, path: String) -> ggez::GameResult<Self> {
         let image = ggez::graphics::Image::new(ctx, &path)?;
-        Ok(Image {
+        Ok(Item {
             //path,
-            image,
+            content: Box::new(image),
             position: nalgebra::Vector2::<f32>::new(0.0, 0.0),
             scale: nalgebra::Vector2::<f32>::new(1.0, 1.0),
             rotation: 0.0,
@@ -57,7 +48,7 @@ impl Image {
         params.rotation = self.rotation;
         params.offset = mint::Point2 { x: 0.5, y: 0.5 };
         params.scale = self.scale.into();
-        ggez::graphics::draw(ctx, &self.image, params)?;
+        self.content.draw(ctx, params)?;
         Ok(())
     }
 

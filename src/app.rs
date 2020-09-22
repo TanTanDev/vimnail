@@ -22,7 +22,7 @@ use action_processer::{ActionProcesser, ActionProcesserBuilder};
 use action_type::ActionType;
 use board::Board;
 use graphics::mode_visualizer::ModeVisualizer;
-use item::{Image, ItemType};
+use item::{Item, ItemType};
 use mode::Mode;
 use mode_history::ModeHistory;
 
@@ -109,7 +109,7 @@ impl event::EventHandler for App {
                     ActionType::AddItem(item) => {
                         if item == ItemType::Image {
                             // todo: remove unwrap
-                            let image = Image::new(ctx, "/ferris.png".to_string()).unwrap();
+                            let image = Item::new(ctx, "/ferris.png".to_string()).unwrap();
                             self.board.item_collection.add(image);
                             self.set_mode(ctx, Mode::Edit);
                             self.current_edit_index =
@@ -122,7 +122,7 @@ impl event::EventHandler for App {
                             direction,
                             is_fast,
                             self.current_edit_index,
-                            item::Image::edit_move,
+                            item::Item::edit_move,
                         );
                     }
                     ActionType::Rotate(direction) => {
@@ -131,7 +131,7 @@ impl event::EventHandler for App {
                             direction,
                             is_fast,
                             self.current_edit_index,
-                            item::Image::rotate,
+                            item::Item::rotate,
                         );
                     }
                     ActionType::Scale(direction) => {
@@ -140,7 +140,7 @@ impl event::EventHandler for App {
                             direction,
                             is_fast,
                             self.current_edit_index,
-                            item::Image::scale,
+                            item::Item::scale,
                         );
                     }
                     ActionType::ScaleUniform(direction) => {
@@ -149,7 +149,7 @@ impl event::EventHandler for App {
                             direction,
                             is_fast,
                             self.current_edit_index,
-                            item::Image::scale_uniform,
+                            item::Item::scale_uniform,
                         );
                     } //_ => {},
                 }
