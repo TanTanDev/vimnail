@@ -22,7 +22,7 @@ use action_processer::{ActionProcesser, ActionProcesserBuilder};
 use action_type::ActionType;
 use board::Board;
 use graphics::mode_visualizer::ModeVisualizer;
-use item::{Item, ItemType};
+use item::ItemType;
 use mode::Mode;
 use mode_history::ModeHistory;
 
@@ -109,7 +109,7 @@ impl event::EventHandler for App {
                     ActionType::AddItem(item) => {
                         if item == ItemType::Image {
                             // todo: remove unwrap
-                            let image = Item::new(ctx, "/ferris.png".to_string()).unwrap();
+                            let image = item::build_image_item(ctx, "/ferris.png".to_string()).unwrap();
                             self.board.item_collection.add(image);
                             self.set_mode(ctx, Mode::Edit);
                             self.current_edit_index =

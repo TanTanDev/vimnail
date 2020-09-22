@@ -20,7 +20,6 @@ pub enum ItemType {
 // }
 
 pub struct Item {
-    //path: String,
     content: Box<dyn Drawable>,
     pub position: nalgebra::Vector2<f32>,
     pub rotation: f32,
@@ -28,11 +27,9 @@ pub struct Item {
 }
 
 impl Item {
-    pub fn new(ctx: &mut Context, path: String) -> ggez::GameResult<Self> {
-        let image = ggez::graphics::Image::new(ctx, &path)?;
+    pub fn new(c: Box<dyn Drawable>) -> ggez::GameResult<Self> {
         Ok(Item {
-            //path,
-            content: Box::new(image),
+            content: c,
             position: nalgebra::Vector2::<f32>::new(0.0, 0.0),
             scale: nalgebra::Vector2::<f32>::new(1.0, 1.0),
             rotation: 0.0,
@@ -143,4 +140,9 @@ impl Item {
             }
         }
     }
+}
+
+//TODO: Add more parameters support for more customized Images
+pub fn build_image_item(ctx: &mut Context, path: String) -> ggez::GameResult<Item> {
+    Ok(Item::new(Box::new(ggez::graphics::Image::new(ctx, path)?))?)
 }
