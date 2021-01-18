@@ -1,3 +1,4 @@
+use crate::command_type::CommandType;
 use crate::direction::Direction;
 use crate::item::ItemType;
 use crate::mode::Mode;
@@ -11,4 +12,6 @@ pub enum ActionType {
     Rotate(Direction),
     Scale(Direction),
     ScaleUniform(Direction),
+    CommandType(CommandType),
+    RunCommand,
 }

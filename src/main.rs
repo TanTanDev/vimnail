@@ -11,6 +11,8 @@ mod action_processer_utils;
 mod action_type;
 mod app;
 mod board;
+mod command_state;
+mod command_type;
 mod constants;
 mod direction;
 mod edit_type;
@@ -22,6 +24,7 @@ mod key_state;
 mod keyboard_input_tracker;
 mod mode;
 mod mode_history;
+mod text_input;
 
 use app::App;
 

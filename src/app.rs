@@ -5,22 +5,27 @@ use ggez::input::keyboard::KeyMods;
 use ggez::input::keyboard::*;
 use ggez::timer;
 use ggez::{Context, GameResult};
+use std::char;
 use std::f32;
 
 use crate::action_processer;
 use crate::action_processer_utils;
 use crate::action_type;
 use crate::board;
+use crate::command_state::CommandState;
+use crate::command_type::CommandType;
 use crate::graphics;
 use crate::item;
 use crate::key_state::KeyState;
 use crate::keyboard_input_tracker::KeyboardInputTracker;
 use crate::mode;
 use crate::mode_history;
+use crate::text_input::TextInput;
 
 use action_processer::{ActionProcesser, ActionProcesserBuilder};
 use action_type::ActionType;
 use board::Board;
+use graphics::input_visualizer::InputVisualizer;
 use graphics::mode_visualizer::ModeVisualizer;
 use item::{Image, ItemType};
 use mode::Mode;
@@ -33,9 +38,13 @@ pub struct App {
     mode: Mode,
     mode_history: ModeHistory,
     mode_visualizer: ModeVisualizer,
+    input_visualizer: InputVisualizer,
     board: Board,
     current_edit_index: Option<usize>,
     keyboard_input_tracker: KeyboardInputTracker,
+    text_input: TextInput,
+    command_state: CommandState,
+    command_type: CommandType,
 }
 
 impl App {
@@ -49,6 +58,7 @@ impl App {
         let mode = Mode::Command;
 
         let mode_visualizer = ModeVisualizer::new(ctx, mode);
+        let input_visualizer = InputVisualizer::new(ctx, &TextInput::new());
         Ok(App {
             //font: Font::new(ctx, "/Montserrat-Black.ttf")?,
             //scale: 1.0,
@@ -57,8 +67,12 @@ impl App {
             mode_history,
             board: Board::new(),
             keyboard_input_tracker: KeyboardInputTracker::new(),
+            text_input: TextInput::new(),
             mode_visualizer,
+            input_visualizer,
             current_edit_index: None,
+            command_state: CommandState::None,
+            command_type: CommandType::None,
         })
     }
 
@@ -94,6 +108,7 @@ impl event::EventHandler for App {
                         self.mode = m;
                         self.mode_history.register(m);
                         self.mode_visualizer.change(ctx, m);
+                        self.command_state = CommandState::None;
                         println!("changed mode to: {:?}", m);
                     }
                     ActionType::_PreviousMode => {
@@ -151,6 +166,34 @@ impl event::EventHandler for App {
                             self.current_edit_index,
                             item::Image::scale_uniform,
                         );
+                    }
+                    ActionType::CommandType(command) => {
+                        self.command_state = CommandState::Listen;
+                        self.command_type = command;
+
+                        //add prefix to input visualizer
+                        match command {
+                            CommandType::SaveImage => {
+                                self.input_visualizer.set_prefix(String::from("Save Image"));
+                                self.input_visualizer.change(ctx, &self.text_input);
+                            }
+                            _ => {}
+                        }
+                    }
+                    ActionType::RunCommand => {
+                        self.command_state = CommandState::Run;
+
+                        match self.command_type {
+                            CommandType::SaveImage => {
+                                let img_path = self.text_input.content.to_string();
+                                self.board.save_image(ctx, &img_path);
+                                self.text_input.clear();
+                            }
+                            _ => {}
+                        }
+
+                        self.input_visualizer.set_prefix(String::from(""));
+                        self.input_visualizer.change(ctx, &self.text_input);
                     } //_ => {},
                 }
             }
@@ -163,6 +206,9 @@ impl event::EventHandler for App {
         ggez::graphics::clear(ctx, [0.1, 0.2, 0.3, 1.0].into());
         self.board.draw(ctx)?;
         self.mode_visualizer.draw(ctx)?;
+        if self.command_type != CommandType::None {
+            self.input_visualizer.draw(ctx)?;
+        }
         ggez::graphics::present(ctx)?;
         timer::yield_now();
         Ok(())
@@ -176,8 +222,11 @@ impl event::EventHandler for App {
         repeat: bool,
     ) {
         if !repeat {
-            self.keyboard_input_tracker
-                .update_key(keycode, KeyState::Pressed);
+            if self.command_state != CommandState::Listen {
+                // prevent the mode to change while in command input
+                self.keyboard_input_tracker
+                    .update_key(keycode, KeyState::Pressed);
+            }
         }
     }
 
@@ -192,5 +241,30 @@ impl event::EventHandler for App {
             ggez::graphics::Rect::new(0.0, 0.0, width, height),
         )
         .unwrap();
+    }
+
+    fn text_input_event(&mut self, ctx: &mut Context, _char: char) {
+        let enter_char = char::from_u32(13).unwrap_or_default();
+        let escape_char = char::from_u32(27).unwrap_or_default();
+        let backspace_char = char::from_u32(8).unwrap_or_default();
+
+        if self.command_state == CommandState::Listen {
+            if _char == enter_char {
+                self.command_state = CommandState::Run;
+                self.key_down_event(ctx, event::KeyCode::Return, KeyMods::empty(), false);
+            } else if _char == escape_char {
+                self.command_state = CommandState::None;
+                self.command_type = CommandType::None;
+
+                self.text_input.clear();
+                self.key_down_event(ctx, event::KeyCode::Escape, KeyMods::empty(), false);
+            } else if _char == backspace_char {
+                self.text_input.del();
+            } else {
+                self.text_input.add(_char);
+            }
+
+            self.input_visualizer.change(ctx, &self.text_input);
+        }
     }
 }
