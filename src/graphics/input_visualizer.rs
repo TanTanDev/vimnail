@@ -30,11 +30,10 @@ impl InputVisualizer {
     }
 
     pub fn change(&mut self, ctx: &mut ggez::Context, text: &TextInput) {
-
         let mut text_content = String::from("");
 
         if self.prefix.len() > 0 {
-            text_content  = format!("{} : {}", self.prefix, text.content.to_string())
+            text_content = format!("{} : {}", self.prefix, text.content.to_string())
         }
 
         self.text = Text::new(TextFragment {
@@ -53,7 +52,7 @@ impl InputVisualizer {
         .unwrap();
     }
 
-    pub fn set_prefix(&mut self, prefix: String){
+    pub fn set_prefix(&mut self, prefix: String) {
         self.prefix = prefix;
     }
 

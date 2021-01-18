@@ -1,5 +1,5 @@
 #[derive(PartialEq)]
-pub enum CommandState{
+pub enum CommandState {
     None,
     Listen,
     Run,

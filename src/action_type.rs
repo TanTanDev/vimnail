@@ -1,7 +1,7 @@
+use crate::command_type::CommandType;
 use crate::direction::Direction;
 use crate::item::ItemType;
 use crate::mode::Mode;
-use crate::command_type::CommandType;
 
 #[derive(Clone, Copy)]
 pub enum ActionType {

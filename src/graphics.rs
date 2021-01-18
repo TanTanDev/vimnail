@@ -1,2 +1,2 @@
-pub mod mode_visualizer;
 pub mod input_visualizer;
+pub mod mode_visualizer;

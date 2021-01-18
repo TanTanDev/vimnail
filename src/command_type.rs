@@ -1,5 +1,5 @@
 #[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
-pub enum CommandType{
+pub enum CommandType {
     None,
     SaveImage,
 }

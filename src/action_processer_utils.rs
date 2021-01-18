@@ -1,11 +1,11 @@
 use crate::action_processer::ActionProcesserBuilder;
 use crate::action_type::ActionType;
+use crate::command_type::CommandType;
 use crate::direction::Direction;
 use crate::edit_type::EditType;
 use crate::input_action::InputAction;
 use crate::item::ItemType;
 use crate::mode::Mode;
-use crate::command_type::CommandType;
 
 use ggez::input::keyboard::KeyCode;
 
@@ -30,10 +30,9 @@ fn configure_command(action_processer_builder: &mut ActionProcesserBuilder) {
             InputAction::new(KeyCode::E, ActionType::ChangeMode(Mode::Edit)),
         )
         .with_inputaction(
-            Mode::Command, 
-            InputAction::new(KeyCode::C, ActionType::ChangeMode(Mode::CommandInput))
-        )
-        ;
+            Mode::Command,
+            InputAction::new(KeyCode::C, ActionType::ChangeMode(Mode::CommandInput)),
+        );
 }
 
 fn configure_edit(action_processer_builder: &mut ActionProcesserBuilder) {
@@ -315,19 +314,20 @@ fn configure_edit_scale_uniform(action_processer_builder: &mut ActionProcesserBu
         );
 }
 
-pub fn configure_command_input(action_processer_builder: &mut ActionProcesserBuilder){
+pub fn configure_command_input(action_processer_builder: &mut ActionProcesserBuilder) {
     action_processer_builder
-    .with_inputaction(
-        Mode::CommandInput,
-        InputAction::new(KeyCode::Escape, ActionType::ChangeMode(Mode::Command)))
-    .with_inputaction(
-        Mode::CommandInput,
-        InputAction::new(KeyCode::W, ActionType::CommandType(CommandType::SaveImage)),
-    )
-    .with_inputaction(
-        Mode::CommandInput,
-        InputAction::new(KeyCode::Return, ActionType::RunCommand),
-    );
+        .with_inputaction(
+            Mode::CommandInput,
+            InputAction::new(KeyCode::Escape, ActionType::ChangeMode(Mode::Command)),
+        )
+        .with_inputaction(
+            Mode::CommandInput,
+            InputAction::new(KeyCode::W, ActionType::CommandType(CommandType::SaveImage)),
+        )
+        .with_inputaction(
+            Mode::CommandInput,
+            InputAction::new(KeyCode::Return, ActionType::RunCommand),
+        );
 }
 
 pub fn configure_default(action_processer_builder: &mut ActionProcesserBuilder) {

@@ -1,8 +1,8 @@
 use crate::direction::Direction;
 use crate::item::Image;
 use crate::item_collection::ItemCollection;
-use ggez::{Context, GameResult, graphics};
 use ggez::conf;
+use ggez::{graphics, Context, GameResult};
 use image::{DynamicImage, ImageBuffer};
 use std::path::Path;
 
@@ -37,9 +37,15 @@ impl Board {
         //TODO: Add better error handling and bubling the error into UI
 
         let (graphic_width, graphic_height) = graphics::drawable_size(ctx);
-        
-        let buffer_canvas = graphics::Canvas::new(ctx, graphic_width as u16, graphic_height as u16, conf::NumSamples::One).ok();
-        
+
+        let buffer_canvas = graphics::Canvas::new(
+            ctx,
+            graphic_width as u16,
+            graphic_height as u16,
+            conf::NumSamples::One,
+        )
+        .ok();
+
         //divert drawing into canvas
         graphics::set_canvas(ctx, buffer_canvas.as_ref());
         self.draw(ctx).unwrap();
@@ -51,18 +57,18 @@ impl Board {
 
         // convert the image to DynamicImage from raw vector
         let image_rgba = canvas_image.to_rgba8(ctx).unwrap();
-        let image_buffer = DynamicImage::ImageRgba8(ImageBuffer::from_raw(graphic_width as u32, graphic_height as u32, image_rgba).unwrap());
+        let image_buffer = DynamicImage::ImageRgba8(
+            ImageBuffer::from_raw(graphic_width as u32, graphic_height as u32, image_rgba).unwrap(),
+        );
 
         // flip the image because the raw image vector is flipped.. dunno why ¯\_(ツ)_/¯
         let image_buffer = image_buffer.flipv();
 
         //save the image
         let image_path = Path::new(path).as_os_str();
-        
+
         match image_buffer.save(image_path) {
-            Ok(_) => {
-                println!("Image saved successfully!")
-            }
+            Ok(_) => println!("Image saved successfully!"),
             Err(err) => {
                 println!("Failed to save image : {:?}", err);
             }

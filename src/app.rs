@@ -5,13 +5,15 @@ use ggez::input::keyboard::KeyMods;
 use ggez::input::keyboard::*;
 use ggez::timer;
 use ggez::{Context, GameResult};
-use std::f32;
 use std::char;
+use std::f32;
 
 use crate::action_processer;
 use crate::action_processer_utils;
 use crate::action_type;
 use crate::board;
+use crate::command_state::CommandState;
+use crate::command_type::CommandType;
 use crate::graphics;
 use crate::item;
 use crate::key_state::KeyState;
@@ -19,14 +21,12 @@ use crate::keyboard_input_tracker::KeyboardInputTracker;
 use crate::mode;
 use crate::mode_history;
 use crate::text_input::TextInput;
-use crate::command_type::CommandType;
-use crate::command_state::CommandState;
 
 use action_processer::{ActionProcesser, ActionProcesserBuilder};
 use action_type::ActionType;
 use board::Board;
-use graphics::mode_visualizer::ModeVisualizer;
 use graphics::input_visualizer::InputVisualizer;
+use graphics::mode_visualizer::ModeVisualizer;
 use item::{Image, ItemType};
 use mode::Mode;
 use mode_history::ModeHistory;
@@ -179,9 +179,8 @@ impl event::EventHandler for App {
                             }
                             _ => {}
                         }
-
                     }
-                    ActionType::RunCommand =>{
+                    ActionType::RunCommand => {
                         self.command_state = CommandState::Run;
 
                         match self.command_type {
@@ -195,8 +194,7 @@ impl event::EventHandler for App {
 
                         self.input_visualizer.set_prefix(String::from(""));
                         self.input_visualizer.change(ctx, &self.text_input);
-                    }
-                    //_ => {},
+                    } //_ => {},
                 }
             }
         }
@@ -209,7 +207,7 @@ impl event::EventHandler for App {
         self.board.draw(ctx)?;
         self.mode_visualizer.draw(ctx)?;
         if self.command_type != CommandType::None {
-                self.input_visualizer.draw(ctx)?;
+            self.input_visualizer.draw(ctx)?;
         }
         ggez::graphics::present(ctx)?;
         timer::yield_now();
@@ -245,7 +243,7 @@ impl event::EventHandler for App {
         .unwrap();
     }
 
-    fn text_input_event(&mut self, ctx: &mut Context, _char: char){
+    fn text_input_event(&mut self, ctx: &mut Context, _char: char) {
         let enter_char = char::from_u32(13).unwrap_or_default();
         let escape_char = char::from_u32(27).unwrap_or_default();
         let backspace_char = char::from_u32(8).unwrap_or_default();
@@ -254,18 +252,15 @@ impl event::EventHandler for App {
             if _char == enter_char {
                 self.command_state = CommandState::Run;
                 self.key_down_event(ctx, event::KeyCode::Return, KeyMods::empty(), false);
-            }
-            else if _char == escape_char {
+            } else if _char == escape_char {
                 self.command_state = CommandState::None;
                 self.command_type = CommandType::None;
 
                 self.text_input.clear();
                 self.key_down_event(ctx, event::KeyCode::Escape, KeyMods::empty(), false);
-            } 
-            else if _char == backspace_char {
+            } else if _char == backspace_char {
                 self.text_input.del();
-            }
-            else {
+            } else {
                 self.text_input.add(_char);
             }
 
