@@ -31,7 +31,7 @@ fn configure_command(action_processer_builder: &mut ActionProcesserBuilder) {
         )
         .with_inputaction(
             Mode::Command, 
-            InputAction::new(KeyCode::Colon, ActionType::ChangeMode(Mode::CommandInput))
+            InputAction::new(KeyCode::C, ActionType::ChangeMode(Mode::CommandInput))
         )
         ;
 }
