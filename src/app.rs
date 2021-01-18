@@ -208,7 +208,9 @@ impl event::EventHandler for App {
         ggez::graphics::clear(ctx, [0.1, 0.2, 0.3, 1.0].into());
         self.board.draw(ctx)?;
         self.mode_visualizer.draw(ctx)?;
-        self.input_visualizer.draw(ctx)?;
+        if self.command_type != CommandType::None {
+                self.input_visualizer.draw(ctx)?;
+        }
         ggez::graphics::present(ctx)?;
         timer::yield_now();
         Ok(())
@@ -255,6 +257,8 @@ impl event::EventHandler for App {
             }
             else if _char == escape_char {
                 self.command_state = CommandState::None;
+                self.command_type = CommandType::None;
+
                 self.text_input.clear();
                 self.key_down_event(ctx, event::KeyCode::Escape, KeyMods::empty(), false);
             } 
