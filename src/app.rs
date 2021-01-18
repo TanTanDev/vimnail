@@ -27,7 +27,7 @@ use action_type::ActionType;
 use board::Board;
 use graphics::input_visualizer::InputVisualizer;
 use graphics::mode_visualizer::ModeVisualizer;
-use item::{Image, ItemType};
+use item::ItemType;
 use mode::Mode;
 use mode_history::ModeHistory;
 
@@ -124,11 +124,17 @@ impl event::EventHandler for App {
                     ActionType::AddItem(item) => {
                         if item == ItemType::Image {
                             // todo: remove unwrap
-                            let image = Image::new(ctx, "/ferris.png".to_string()).unwrap();
-                            self.board.item_collection.add(image);
+                            let display_image = item::build_image_item(ctx, "/ferris.png".to_string()).unwrap();
+                            self.board.item_collection.add(display_image);
                             self.set_mode(ctx, Mode::Edit);
-                            self.current_edit_index =
-                                Some(self.board.item_collection.items.len() - 1);
+                            self.current_edit_index = Some(self.board.item_collection.items.len() - 1);
+                        }
+                        else if item == ItemType::Text {
+                            // todo: remove unwrap
+                            let display_text = item::build_text_item("YE BOI".into()).unwrap();
+                            self.board.item_collection.add(display_text);
+                            self.set_mode(ctx, Mode::Edit);
+                            self.current_edit_index = Some(self.board.item_collection.items.len() - 1);
                         }
                     }
                     ActionType::Move(direction) => {
@@ -137,7 +143,7 @@ impl event::EventHandler for App {
                             direction,
                             is_fast,
                             self.current_edit_index,
-                            item::Image::edit_move,
+                            item::Item::edit_move,
                         );
                     }
                     ActionType::Rotate(direction) => {
@@ -146,7 +152,7 @@ impl event::EventHandler for App {
                             direction,
                             is_fast,
                             self.current_edit_index,
-                            item::Image::rotate,
+                            item::Item::rotate,
                         );
                     }
                     ActionType::Scale(direction) => {
@@ -155,7 +161,7 @@ impl event::EventHandler for App {
                             direction,
                             is_fast,
                             self.current_edit_index,
-                            item::Image::scale,
+                            item::Item::scale,
                         );
                     }
                     ActionType::ScaleUniform(direction) => {
@@ -164,7 +170,7 @@ impl event::EventHandler for App {
                             direction,
                             is_fast,
                             self.current_edit_index,
-                            item::Image::scale_uniform,
+                            item::Item::scale_uniform,
                         );
                     }
                     ActionType::CommandType(command) => {
