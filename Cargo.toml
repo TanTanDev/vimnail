@@ -6,9 +6,9 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-ggez = "0.5"
-nalgebra = {version = "0.20", features = ["mint"] }
+ggez = "0.7"
+nalgebra = {version = "0.30", features = ["mint"] }
 mint = "0.5"
-cgmath = { version = "0.17", features = ["mint"]}
-rand = "0.7"
-image= "0.23"
+cgmath = { version = "0.18", features = ["mint"]}
+rand = "0.8"
+image= "0.24"
