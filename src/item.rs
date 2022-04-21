@@ -49,14 +49,14 @@ impl Image {
     }
 
     pub fn draw(&self, ctx: &mut Context) -> ggez::GameResult {
-        let mut params = ggez::graphics::DrawParam::default();
-        params.dest = mint::Point2 {
+        let params = ggez::graphics::DrawParam::default();
+        params.dest(mint::Point2 {
             x: self.position.x,
             y: self.position.y,
-        };
-        params.rotation = self.rotation;
-        params.offset = mint::Point2 { x: 0.5, y: 0.5 };
-        params.scale = self.scale.into();
+        });
+        params.rotation(self.rotation);
+        params.offset(mint::Point2 { x: 0.5, y: 0.5 });
+        params.scale(self.scale);
         ggez::graphics::draw(ctx, &self.image, params)?;
         Ok(())
     }

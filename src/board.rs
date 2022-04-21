@@ -43,6 +43,7 @@ impl Board {
             graphic_width as u16,
             graphic_height as u16,
             conf::NumSamples::One,
+            graphics::get_window_color_format(ctx),
         )
         .ok();
 
@@ -53,10 +54,9 @@ impl Board {
 
         // capture the image from canvas into raw vector
         let canvas = buffer_canvas.unwrap();
-        let canvas_image = canvas.into_inner();
+        let image_rgba = canvas.to_rgba8(ctx).unwrap();
 
         // convert the image to DynamicImage from raw vector
-        let image_rgba = canvas_image.to_rgba8(ctx).unwrap();
         let image_buffer = DynamicImage::ImageRgba8(
             ImageBuffer::from_raw(graphic_width as u32, graphic_height as u32, image_rgba).unwrap(),
         );

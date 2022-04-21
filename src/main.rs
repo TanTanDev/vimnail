@@ -43,7 +43,7 @@ pub fn main() -> GameResult {
         path::PathBuf::from("./resources")
     };
 
-    let (ctx, events_loop) = &mut ContextBuilder::new("text_cached", "ggez")
+    let (mut ctx, events_loop) = ContextBuilder::new("text_cached", "ggez")
         .window_setup(WindowSetup::default().title("Vimnail"))
         .window_mode(
             WindowMode::default()
@@ -52,6 +52,6 @@ pub fn main() -> GameResult {
         )
         .add_resource_path(resource_dir)
         .build()?;
-    let state = &mut App::new(ctx)?;
+    let state = App::new(&mut ctx)?;
     event::run(ctx, events_loop, state)
 }
